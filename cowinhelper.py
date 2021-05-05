@@ -23,9 +23,10 @@ pincodes = "560036"
 paramsoption = {'pincode':pincodes,'date':currentdaytime}
 
 urlhits = "https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByPin"
-printResult(urlhits)
 
 response = requests.get(urlhits,params=paramsoption)
+
+printResult(response)
 
 helperjson = response.json()
 
