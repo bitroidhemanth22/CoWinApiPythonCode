@@ -1,8 +1,18 @@
 import requests
 import json
-from json import JSONDecodeError
 from tabulate import tabulate
 from datetime import datetime
+
+def printResult(resData):
+    print("Result code: {0}".format(resData.status_code))
+    print("\n")
+
+    print("Headers: ---------------")
+    print(resData.headers)
+    print("\n")
+
+    print("Returned data: ---------------")
+    print(resData.content)
 
 currentday = datetime.now()
 
@@ -13,6 +23,7 @@ pincodes = "560036"
 paramsoption = {'pincode':pincodes,'date':currentdaytime}
 
 urlhits = "https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByPin"
+printResult(urlhits)
 
 response = requests.get(urlhits,params=paramsoption)
 
