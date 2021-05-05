@@ -1,5 +1,6 @@
 import requests
 import json
+from json import JSONDecodeError
 from tabulate import tabulate
 from datetime import datetime
 
