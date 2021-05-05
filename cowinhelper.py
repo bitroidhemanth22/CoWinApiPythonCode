@@ -15,7 +15,7 @@ urlhits = "https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendar
 
 response = requests.get(urlhits,params=paramsoption)
 
-helperjson = response.json()
+helperjson = json.loads(response.json())
 
 def jprint(obj):
     text = json.dumps(obj, sort_keys=True, indent=4)
