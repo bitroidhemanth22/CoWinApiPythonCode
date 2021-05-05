@@ -28,6 +28,5 @@ jobs:
         python --version
         python3 --version
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-        python cowinhelper.py
     - name: Test with pytest
       run: python3 cowinhelper.py
