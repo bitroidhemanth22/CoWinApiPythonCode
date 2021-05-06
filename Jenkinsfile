@@ -1,7 +1,7 @@
 node {
 try{
 stage ('Downloading git repository'){
-    git branch: 'main', credentialsId: 'github', url: 'https://github.com/hemanth22/pythonapi_practise.git'
+    git branch: 'main', credentialsId: 'github', url: 'https://github.com/hemanth22/CoWinApiPythonCode.git'
 }
 stage ('Build and execute'){
     sh 'python3 cowinhelper.py'
