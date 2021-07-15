@@ -38,6 +38,7 @@ sotrjson = json.dumps(response.json(),sort_keys=True, indent=4)
 
 #print(sotrjson)
 
+
 for centerlist in helperjson["centers"]:
  #   print(centerlist)
     pname = centerlist['name']
@@ -46,6 +47,7 @@ for centerlist in helperjson["centers"]:
     pcenterid = centerlist['center_id']
     pdistrict = centerlist['district_name']
     ppincode = centerlist['pincode']
+    pfee = centerlist['fee_type']
     for dos in centerlist['sessions']:
         pavailable_capacity = dos['available_capacity']
         pdate = dos['date']
@@ -53,5 +55,85 @@ for centerlist in helperjson["centers"]:
         pslot = dos['slots']
         pvaccine = dos['vaccine']
         #print(pname,paddress,pblockname,pdistrict,ppincode,pdate,pavailable_capacity,pmin_age_limit,pvaccine)
-        table = [(pcenterid,pname,paddress,pblockname,pdistrict,ppincode,pdate,pavailable_capacity,pmin_age_limit,pvaccine)
-        print(tabulate(sorted(table),tablefmt="grid"))
+        CENTERID = 'Center ID'
+        NAME = 'Name'
+        ADDRESS = 'Address'
+        BLOCKNAME = 'Block Name'
+        DISTRICT = 'District'
+        PINCODE = 'Pincode'
+        Fee= 'Fee Type'
+        DATE = 'date'
+        AVAILABLE_CAPACITY = 'Available Capacity'
+        MIMIMUM_AGE_LIMIT = 'Minimum Age Limit'
+        VACCINE = 'Vaccine'
+
+        table = [[CENTERID,NAME,ADDRESS,BLOCKNAME,DISTRICT,PINCODE,DATE,pdate,AVAILABLE_CAPACITY,MIMIMUM_AGE_LIMIT,VACCINE],[pcenterid,pname,paddress,pblockname,pdistrict,ppincode,pfee,pdate,pavailable_capacity,pmin_age_limit,pvaccine]]
+        fileoutlist = (tabulate(sorted(table),headers="firstrow",tablefmt="grid"))
+        fileouthtml = (tabulate(sorted(table),headers="firstrow",tablefmt="html"))
+        #finaltablehtml=(tabulate(table, headers="firstrow", tablefmt="html"))
+        #finaltabletext=(tabulate(table, headers="firstrow", tablefmt="grid"))
+        #print(finaltabletext);
+
+        #filelisten = [finaltablehtml,finaltabletext]
+        filelisten = [fileouthtml,fileoutlist]
+
+        import smtplib
+        from email.mime.text import MIMEText
+        from email.mime.multipart import MIMEMultipart
+        port = 25
+        sender_email = 'localhost'
+        receiver_email = ['localhost','localhost']
+        reply_to_email = 'localhost'
+        carbonc_copy_email = 'localhost'
+
+        message = MIMEMultipart("alternative")
+
+        message["Subject"] = "Test Mail"
+        message["From"] = sender_email
+        message["To"] = ",".join(receiver_email)
+        message["Cc"] = ",".join(carbonc_copy_email)
+        message["Reply-to"] = reply_to_email
+
+        text = f"""
+        Hello team,
+
+        Please find data below.
+
+        {filelisten[1]}
+
+        Regards,
+        Hemanth.
+        """
+
+        html = f"""
+        <html>
+        <head>
+        <style>
+            table, th, td {{ border: 1px solid black; border-collapse: collapse; }}
+            th, td {{ padding: 5px; }}
+        </style>
+        </head>
+        <body>
+        <p>Hello team,</p>
+        <p>Please find data below.</p>
+
+        {filelisten[1]}
+
+        <p>Regards,</p>
+        <p>Hemanth.</p>
+        </body>
+        </html>
+        """
+
+        part1 = MIMEText(text, "plain")
+        part2 = MIMEText(html, "plain")
+        message.attach(part1)
+        message.attach(part2)
+
+        with smtplib.SMTP("localhost", port) as server:
+            server.sendmail(
+                sender_email, (receiver_email+carbonc_copy_email), message.as_string()
+            )
+
+        print('\n')
+        print('Mail Sent Successfully')
