@@ -7,12 +7,12 @@ def printResult(resData):
     print("Result code: {0}".format(resData.status_code))
     print("\n")
 
-    print("Headers: ---------------")
-    print(resData.headers)
-    print("\n")
+    #print("Headers: ---------------")
+    #print(resData.headers)
+    #print("\n")
 
-    print("Returned data: ---------------")
-    print(resData.content)
+    #print("Returned data: ---------------")
+    #print(resData.content)
 
 currentday = datetime.now()
 
@@ -26,7 +26,7 @@ urlhits = "https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendar
 
 response = requests.get(urlhits,params=paramsoption)
 
-printResult(response)
+#printResult(response)
 
 helperjson = response.json()
 
@@ -36,7 +36,7 @@ def jprint(obj):
 
 sotrjson = json.dumps(response.json(),sort_keys=True, indent=4)
 
-print(sotrjson)
+#print(sotrjson)
 
 for centerlist in helperjson["centers"]:
  #   print(centerlist)
@@ -52,7 +52,6 @@ for centerlist in helperjson["centers"]:
         pmin_age_limit = dos['min_age_limit']
         pslot = dos['slots']
         pvaccine = dos['vaccine']
-        
-table = [(pname,'|',paddress,'|',pblockname,'|',pcenterid,'|',pdistrict,'|',ppincode,'|',pdate,'|',pavailable_capacity,'|',pmin_age_limit,'|',pvaccine)]
-
-print(tabulate(sorted(table),tablefmt="grid"))
+        #print(pname,paddress,pblockname,pdistrict,ppincode,pdate,pavailable_capacity,pmin_age_limit,pvaccine)
+        table = [(pcenterid,pname,paddress,pblockname,pdistrict,ppincode,pdate,pavailable_capacity,pmin_age_limit,pvaccine)
+        print(tabulate(sorted(table),tablefmt="grid"))
