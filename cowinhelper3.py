@@ -26,7 +26,7 @@ urlhits = "https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendar
 
 response = requests.get(urlhits,params=paramsoption)
 
-#printResult(response)
+printResult(response)
 
 helperjson = response.json()
 
@@ -73,7 +73,67 @@ for centerlist in helperjson["centers"]:
         #finaltablehtml=(tabulate(table, headers="firstrow", tablefmt="html"))
         #finaltabletext=(tabulate(table, headers="firstrow", tablefmt="grid"))
         #print(finaltabletext);
-        #print(fileoutlist)
-        print(fileoutlist)
+
         #filelisten = [finaltablehtml,finaltabletext]
         filelisten = [fileouthtml,fileoutlist]
+
+        import smtplib
+        from email.mime.text import MIMEText
+        from email.mime.multipart import MIMEMultipart
+        port = 1025
+        sender_email = 'localhost'
+        receiver_email = ['localhost','localhost']
+        reply_to_email = 'localhost'
+        carbonc_copy_email = 'localhost'
+
+        message = MIMEMultipart("alternative")
+
+        message["Subject"] = "Test Mail"
+        message["From"] = sender_email
+        message["To"] = ",".join(receiver_email)
+        message["Cc"] = ",".join(carbonc_copy_email)
+        message["Reply-to"] = reply_to_email
+
+        text = f"""
+        Hello team,
+
+        Please find data below.
+
+        {filelisten[1]}
+
+        Regards,
+        Hemanth.
+        """
+
+        html = f"""
+        <html>
+        <head>
+        <style>
+        table, th, td {{ border: 1px solid black; border-collapse: collapse; }}
+        th, td {{ padding: 5px; }}
+        </style>
+        </head>
+        <body>
+        <p>Hello team,</p>
+        <p>Please find html data below.</p>
+
+        {filelisten[0]}
+
+        <p>Regards,</p>
+        <p>Hemanth.</p>
+        </body>
+        </html>
+        """
+
+        part1 = MIMEText(text, "plain")
+        part2 = MIMEText(html, "plain")
+        message.attach(part1)
+        message.attach(part2)
+
+        with smtplib.SMTP("0.0.0.0", port) as server:
+            server.sendmail(
+                sender_email,receiver_email,message.as_string()
+                )
+
+            print('\n')
+            print('Mail Sent Successfully')
